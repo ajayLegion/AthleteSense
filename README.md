@@ -1,4 +1,5 @@
 # AthleteSense
+## Buliding stage 
 An ESP32-powered wearable bio-tracker monitoring real-time heart rate, muscle activity (EMG), and environmental metrics via a custom web dashboard.
 Here is a clean, professional, GitHub-ready README.md version of your project. It is structured for clarity, technical credibility, and presentation quality.
 
