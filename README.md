@@ -149,7 +149,7 @@ Launch frontend to visualize real-time data
 
 📄 License
 
-This project is open-source and available under the MIT License.
+All rights reserved. This software is proprietary and cannot be distributed or modified without explicit permission from the owner.
 
 
 ---
@@ -169,8 +169,6 @@ Contributions are welcome! Feel free to fork this repo and submit pull requests.
 ---
 
 🙌 Acknowledgements
-
-Open-source IoT community
 
 Sensor module documentation
 
