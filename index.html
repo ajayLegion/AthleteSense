@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>ESP32 Biometric Monitor</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<style>
+body { background:#0a0a0a; color:white; font-family:sans-serif; text-align:center; }
+.card { background:#161616; margin:20px; padding:20px; border-radius:12px; }
+h2 { color:#00e676; }
+</style>
+</head>
+<body>
+
+<h1>BIOMETRIC MONITOR</h1>
+
+<div class="card">
+<h2>HEART RATE</h2>
+<div style="font-size:2em;"><span id="bpm">--</span> BPM</div>
+<canvas id="chartBPM"></canvas>
+</div>
+
+<div class="card">
+<h2>MUSCLE ACTIVITY</h2>
+<div style="font-size:2em;"><span id="emg">--</span>%</div>
+<canvas id="chartEMG"></canvas>
+</div>
+
+<div class="card">
+<h2>TEMPERATURE</h2>
+<div style="font-size:2em;"><span id="temp">--</span> °C</div>
+</div>
+
+<div class="card">
+<h2>HUMIDITY</h2>
+<div style="font-size:2em;"><span id="hum">--</span> %</div>
+</div>
+
+<script>
+var gateway = `ws://${window.location.hostname}:81/`;
+var websocket = new WebSocket(gateway);
+
+const config = (label, color, min, max) => ({
+  type:'line',
+  data:{labels:[], datasets:[{label:label,data:[],borderColor:color,fill:false}]},
+  options:{animation:false,scales:{y:{min:min,max:max}}}
+});
+
+var chartBPM = new Chart(document.getElementById('chartBPM'), config('BPM','#ff5252',40,180));
+var chartEMG = new Chart(document.getElementById('chartEMG'), config('EMG','#00e676',0,100));
+
+websocket.onmessage = function(event){
+  var data = JSON.parse(event.data);
+
+  document.getElementById("bpm").innerHTML = data.bpm.toFixed(1);
+  document.getElementById("emg").innerHTML = data.emg.toFixed(1);
+  document.getElementById("temp").innerHTML = data.temp.toFixed(1);
+  document.getElementById("hum").innerHTML = data.hum.toFixed(1);
+
+  update(chartBPM, data.bpm);
+  update(chartEMG, data.emg);
+};
+
+function update(chart,value){
+  if(chart.data.labels.length>30){
+    chart.data.labels.shift();
+    chart.data.datasets[0].data.shift();
+  }
+  chart.data.labels.push("");
+  chart.data.datasets[0].data.push(value);
+  chart.update();
+}
+</script>
+</body>
+</html>
